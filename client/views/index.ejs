@@ -1,0 +1,13 @@
+<html>
+  <head>
+    <% _.each(styles, function(style) { %>
+      <link href="/stylesheets/<%= style %>" media="screen" rel="stylesheet" type="text/css">
+    <% }) %>
+  </head>
+ 
+  <script type="text/javascript" src="http://documentcloud.github.com/underscore/underscore.js"></script> 
+  <script type="text/javascript" src="http://documentcloud.github.com/backbone/backbone.js"></script>
+  <% _.each(javascripts, function(javascript) { %>
+    <script type="text/javascript" src="/javascripts/<%= javascript %>"></script>
+  <% }) %>
+</html>

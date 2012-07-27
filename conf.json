@@ -1,0 +1,10 @@
+{
+  "env": "production",
+  "templatesDir": "./client/templates/",
+  "javascriptsDir": "./client/public/javascripts/",
+  "stylesDir": "./client/public/stylesheets",
+  "server": {
+    "port": 3000
+  },
+  "specificConf": "~/ysoez/conf.json"
+}
