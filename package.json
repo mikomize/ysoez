@@ -10,6 +10,7 @@
     "nconf" : "*",
     "underscore": "*",
     "cc": "*",
-    "ejs": "*"
+    "ejs": "*",
+    "redis": "*"
   }
 }

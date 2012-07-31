@@ -3,13 +3,15 @@
  * Module dependencies.
  */
 
-var express = require('express')
-  , http = require('http')
-  , path = require('path')
-  , nconf = require('nconf')
-  , fs = require('fs');
+var express = require('express'),
+    http = require('http'),
+    path = require('path'),
+    nconf = require('nconf'), 
+    fs = require('fs'),
+    redis = require('redis');
   
 _ = require('underscore');
+
 
 require('cc');
 require('./client/TemplatesHandler');
@@ -20,9 +22,12 @@ nconf.remove('global'); //nconf merging direction is so wrong
 nconf.add('global', {type: 'file', file: 'conf.json'});
 process.env.NODE_ENV = nconf.get('env');
 
-var app = express();
+
+app = express();
 
 app.configure(function(){
+  app.conf =  nconf;
+  app.redis = redis.createClient(nconf.get('redis:port'));
   app.set('port', nconf.get('server:port'));
   app.set('views', __dirname + '/client/views');
   app.set('view engine', 'ejs');
@@ -38,6 +43,8 @@ app.configure(function(){
   app.set('styles', fs.readdirSync(nconf.get('stylesDir')));
   app.set('javascripts', fs.readdirSync(nconf.get('javascriptsDir')));
 });
+
+require('./server/routes/routes.js');
 
 app.get('/', function (req, res) {
   res.render('index.ejs', {
