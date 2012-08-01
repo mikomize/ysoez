@@ -1,4 +1,6 @@
 app.get('/server/*', function (request, response, next) {
+  request.session.asd = (request.session.asd || 0) + 1;
+  console.log(request.session.asd);
   console.log('server!');
   next();
 });

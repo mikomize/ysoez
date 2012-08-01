@@ -11,6 +11,8 @@
     "underscore": "*",
     "cc": "*",
     "ejs": "*",
-    "redis": "*"
+    "redis": "*",
+    "connect": "*",
+    "connect-redis": "*"
   }
 }

@@ -8,7 +8,9 @@ var express = require('express'),
     path = require('path'),
     nconf = require('nconf'), 
     fs = require('fs'),
-    redis = require('redis');
+    redis = require('redis'),
+    RedisStore = require('connect-redis')(express);
+
   
 _ = require('underscore');
 
@@ -31,9 +33,13 @@ app.configure(function(){
   app.set('port', nconf.get('server:port'));
   app.set('views', __dirname + '/client/views');
   app.set('view engine', 'ejs');
+  app.use(express.bodyParser());
+  app.use(express.cookieParser());
+  //app.use(express.session({ secret: "keyboard cat", store: new RedisStore({"client": app.redis})}));
+  app.use(express.session({ secret: "keyboard cat"}));
+
   app.use(express.favicon());
   app.use(express.logger('dev'));
-  app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, '/client/public')));
