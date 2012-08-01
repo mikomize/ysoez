@@ -26,10 +26,7 @@ process.env.NODE_ENV = nconf.get('env');
 
 app = {};
 app.express = express();
-app.backend = {
-  redis : redis.createClient(nconf.get('redis:port'))
-};
-app.server = require('./server/server')(app.backend);
+app.server = require('./server/server')(redis,nconf);
 
 app.express.configure(function(){
   app.express.conf =  nconf;
@@ -53,7 +50,7 @@ app.express.configure(function(){
   app.express.set('javascripts', fs.readdirSync(nconf.get('javascriptsDir')));
 });
 
-require('./server/routes/routes.js');
+require('./server/routes/routes.js')(app.express,app.server.api);
 
 app.express.get('/', function (req, res) {
   res.render('index.ejs', {
