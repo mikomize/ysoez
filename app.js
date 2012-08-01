@@ -22,37 +22,37 @@ nconf.remove('global'); //nconf merging direction is so wrong
 nconf.add('global', {type: 'file', file: 'conf.json'});
 process.env.NODE_ENV = nconf.get('env');
 
+app = {};
+app.express = express();
 
-app = express();
-
-app.configure(function(){
-  app.conf =  nconf;
+app.express.configure(function(){
+  app.express.conf =  nconf;
   app.redis = redis.createClient(nconf.get('redis:port'));
-  app.set('port', nconf.get('server:port'));
-  app.set('views', __dirname + '/client/views');
-  app.set('view engine', 'ejs');
-  app.use(express.favicon());
-  app.use(express.logger('dev'));
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
-  app.use(express.static(path.join(__dirname, '/client/public')));
+  app.express.set('port', nconf.get('server:port'));
+  app.express.set('views', __dirname + '/client/views');
+  app.express.set('view engine', 'ejs');
+  app.express.use(express.favicon());
+  app.express.use(express.logger('dev'));
+  app.express.use(express.bodyParser());
+  app.express.use(express.methodOverride());
+  app.express.use(app.express.router);
+  app.express.use(express.static(path.join(__dirname, '/client/public')));
 
   var templatesHandler = new TemplatesHandler(nconf);
   templatesHandler.make();
-  app.set('styles', fs.readdirSync(nconf.get('stylesDir')));
-  app.set('javascripts', fs.readdirSync(nconf.get('javascriptsDir')));
+  app.express.set('styles', fs.readdirSync(nconf.get('stylesDir')));
+  app.express.set('javascripts', fs.readdirSync(nconf.get('javascriptsDir')));
 });
 
 require('./server/routes/routes.js');
 
-app.get('/', function (req, res) {
+app.express.get('/', function (req, res) {
   res.render('index.ejs', {
-    styles: app.get('styles'),
-    javascripts: app.get('javascripts')
+    styles: app.express.get('styles'),
+    javascripts: app.express.get('javascripts')
   });
 });
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
+http.createServer(app.express).listen(app.express.get('port'), function(){
+  console.log("Express server listening on port " + app.express.get('port'));
 });
