@@ -26,16 +26,19 @@ process.env.NODE_ENV = nconf.get('env');
 
 app = {};
 app.express = express();
+app.backend = {
+  redis : redis.createClient(nconf.get('redis:port'))
+};
+app.server = require('./server/server')(app.backend);
 
 app.express.configure(function(){
   app.express.conf =  nconf;
-  app.redis = redis.createClient(nconf.get('redis:port'));
   app.express.set('port', nconf.get('server:port'));
   app.express.set('views', __dirname + '/client/views');
   app.express.set('view engine', 'ejs');
   app.express.use(express.bodyParser());
   app.express.use(express.cookieParser());
-  //app.express.use(express.session({ secret: "keyboard cat", store: new RedisStore({"client": app.redis})}));
+  //app.express.use(express.session({ secret: "keyboard cat", store: new RedisStore({"client": app.backend.redis})}));
   app.express.use(express.session({ secret: "keyboard cat"}));
 
   app.express.use(express.favicon());
